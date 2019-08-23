@@ -8,333 +8,427 @@ namespace ludo
 {
     class Ludo
     {
-        class Game
-        {
-            //=================Fields====================
-            private int playingPlayer;
+        //=================Fields====================
+        
 
+        class Program
+        {
+            //Variables
+            Piece piece = new Piece();
+            Board board = new Board();
+            Dice dice = new Dice();
+            Player player = new Player();
+            int run = 1;
 
             //=================Methods===================
             //-------------------SET---------------------
-            public void reset()
+
+            //Reset the game
+            public void Reset()
             {
                 //Home reset
-                Board board = new Board();
                 for (int i = 1; i <= 4; i++)
                 {
                     for (int p = 0; p <= 3; p++)
                     {
-                        board.setPlayerHomeIn(i, p);
+                        board.SetPlayerHomeIn(i, p);
                     }
                     Console.WriteLine("Player " + i + " has been reset.");
                 }
                 Console.WriteLine("All players are home.");
 
                 //Coordinate reset
-                Piece piece = new Piece();
+                
                 for (int i = 0; i <= 15; i++)
                 {
-                    piece.setPieceCords(i, 5471);                    
+                    piece.SetPieceCords(i, 5471);                    
                 }
                 Console.WriteLine("All coordinates has been reset.");
 
-                playingPlayer = 1;
+                player.SetPlayingPlayer(1);
 
                 Console.WriteLine("Everything has been reset.");
+                Console.WriteLine(" ");
+                Console.WriteLine("-------------------------------------");
+                Console.WriteLine(" ");
             }
-
+            //Sets a new Dice
+            public int SetNewDice()
+            {
+                return dice.SetNewDice();
+            }
 
             //-------------------GET---------------------
-            public int GetPlayingPlayer()
-            {
-                return playingPlayer;
-            }
 
+            //Writes where every piece is currently
             public void GetAllInfo()
             {
-                for(int i = 0; i <= 15; i++)
+                Console.WriteLine(" ");
+                for (int i = 0; i <= 15; i++)
                 {
-                    Piece piece = new Piece();
-                    if(piece.getPieceCords(i) == 5471)
+                    if(piece.GetPieceCords(i) == 5471)
                     {
-
+                        Console.WriteLine(piece.GetPieceName(i) + " er hjemme.");
+                    }
+                    else if (piece.GetPieceCords(i) >= 5500)
+                    {
+                        Console.WriteLine(piece.GetPieceName(i) + " er færdig.");
                     }
                     else
                     {
-
+                        Console.WriteLine(piece.GetPieceName(i) + " står på " + piece.GetPieceCords(i));
                     }
                 }
             }
-
-
-        }
-        class Board
-        {
-            //=================Fields====================
-            private int[] player1Home = { 0, 1, 2, 3 };
-            private int[] player2Home = { 4, 5, 6, 7 };
-            private int[] player3Home = { 8, 9, 10, 11 };
-            private int[] player4Home = { 12, 13, 14, 15 };
             
-
-
-            //=================Methods===================
-            //-------------------SET---------------------
-
-            //Sets defined Piece as out
-            public void setPlayerHomeOut(int pl, int pi)
+            
+            //States the options the player has
+            public void GetOptions()
             {
-                switch(pl)
+                string[] playingPlayerPieceName = new string[4];
+
+                for (int i = 0; i <=3; i++)
+                {
+                    playingPlayerPieceName[i] = piece.GetPieceName(player.GetPlayingPlayerPiece(i));
+                }
+
+                Console.WriteLine(" ");
+                Console.WriteLine("Det er spiller {0} tur, du kan flytte på {1}, {2}, {3}, {4}.", player.GetPlayingPlayer(), playingPlayerPieceName[0], playingPlayerPieceName[1], playingPlayerPieceName[2], playingPlayerPieceName[3]);
+                Console.WriteLine("Du har slået en {0} terning. Hvad gør du?", GetDice());
+
+            }
+            
+            
+            //Gets player respons and starts related functions
+            public void PlayerRespons()
+            {
+                string playerRespons;
+                int intRespons = 0;
+                int moveType = 0;
+                int moveTo;
+
+                playerRespons = Console.ReadLine();
+
+                switch (player.GetPlayingPlayer())
                 {
                     case 1:
-                        //Code 5471 = Out
-                        player1Home[pi] = 5471;
+                        switch (playerRespons)
+                        {
+                            case "a":
+                            case "A":
+                                intRespons = 0;
+                                moveType = CheckIsMovePossible(intRespons);
+                                break;
+                            case "b":
+                            case "B":
+                                intRespons = 1;
+                                moveType = CheckIsMovePossible(intRespons);
+                                break;
+                            case "c":
+                            case "C":
+                                intRespons = 2;
+                                moveType = CheckIsMovePossible(intRespons);
+                                break;
+                            case "d":
+                            case "D":
+                                intRespons = 3;
+                                moveType = CheckIsMovePossible(intRespons);
+                                break;
+                        }
                         break;
                     case 2:
-                        //Code 5471 = Out
-                        player2Home[pi] = 5471;
+                        switch (playerRespons)
+                        {
+                            case "e":
+                            case "E":
+                                intRespons = 4;
+                                moveType = CheckIsMovePossible(intRespons);
+                                break;
+                            case "f":
+                            case "F":
+                                intRespons = 5;
+                                moveType = CheckIsMovePossible(intRespons);
+                                break;
+                            case "g":
+                            case "G":
+                                intRespons = 6;
+                                moveType = CheckIsMovePossible(intRespons);
+                                break;
+                            case "h":
+                            case "H":
+                                intRespons = 7;
+                                moveType = CheckIsMovePossible(intRespons);
+                                break;
+                        }
                         break;
                     case 3:
-                        //Code 5471 = Out
-                        player3Home[pi] = 5471;
+                        switch (playerRespons)
+                        {                           
+                            case "i":
+                            case "I":
+                                intRespons = 8;
+                                moveType = CheckIsMovePossible(intRespons);
+                                break;
+                            case "j":
+                            case "J":
+                                intRespons = 9;
+                                moveType = CheckIsMovePossible(intRespons);
+                                break;
+                            case "k":
+                            case "K":
+                                intRespons = 10;
+                                moveType = CheckIsMovePossible(intRespons);
+                                break;
+                            case "l":
+                            case "L":
+                                intRespons = 11;
+                                moveType = CheckIsMovePossible(intRespons);
+                                break;
+                        }
                         break;
                     case 4:
-                        //Code 5471 = Out
-                        player4Home[pi] = 5471;
+                        switch (playerRespons)
+                        {
+                            case "m":
+                            case "M":
+                                intRespons = 12;
+                                moveType = CheckIsMovePossible(intRespons);
+                                break;
+                            case "n":
+                            case "N":
+                                intRespons = 13;
+                                moveType = CheckIsMovePossible(intRespons);
+                                break;
+                            case "o":
+                            case "O":
+                                intRespons = 14;
+                                moveType = CheckIsMovePossible(intRespons);
+                                break;
+                            case "p":
+                            case "P":
+                                intRespons = 15;
+                                moveType = CheckIsMovePossible(intRespons);
+                                break;
+                        }
                         break;
                 }
 
-            }
-            //Sets defined Piece as in
-            public void setPlayerHomeIn(int pl, int pi)
-            {
-                switch (pl)
-                {
-                    case 1:
-                        player1Home[pi] = pi;
-                        break;
-                    case 2:
-                        player2Home[pi] = pi + 4;
-                        break;
-                    case 3:
-                        player3Home[pi] = pi + 8;
-                        break;
-                    case 4:
-                        player4Home[pi] = pi + 12;
-                        break;
-                }
-
-            }
-
-            //-------------------GET---------------------
-
-            //Returns piece number if its inside, returns 21 if out.
-            public int getIsPieceHome(int pi)
-            {
-                Boolean isHome = false;
-                switch (pi)
+                switch (moveType)
                 {
                     case 0:
+
+                        break;
                     case 1:
+                        moveTo = piece.GetPieceCords(intRespons) + GetDice();
+                        Console.WriteLine("Player {0}, har rykket {1} fra {2} til {3}.",
+                            player.GetPlayingPlayer(), piece.GetPieceName(intRespons), piece.GetPieceCords(intRespons), moveTo);
+                        piece.SetPieceCords(intRespons, moveTo);
+                        break;
                     case 2:
+                        switch (player.GetPlayingPlayer())
+                        {
+                            case 1:
+                                moveTo = 2;
+                                piece.SetPieceCords(intRespons, moveTo);
+                                board.SetPlayerHomeOut(player.GetPlayingPlayer(), intRespons);
+                                Console.WriteLine("Player {0}, har rykket {1} fra hjem til {2}.", 
+                                    player.GetPlayingPlayer(), piece.GetPieceName(intRespons), moveTo);
+                                break;
+                            case 2:
+                                moveTo = 17;
+                                piece.SetPieceCords(intRespons, moveTo);
+                                board.SetPlayerHomeOut(player.GetPlayingPlayer(), intRespons);
+                                Console.WriteLine("Player {0}, har rykket {1} fra hjem til {2}.",
+                                    player.GetPlayingPlayer(), piece.GetPieceName(intRespons), moveTo);
+                                break;
+                            case 3:
+                                moveTo = 32;
+                                piece.SetPieceCords(intRespons, moveTo);
+                                board.SetPlayerHomeOut(player.GetPlayingPlayer(), intRespons);
+                                Console.WriteLine("Player {0}, har rykket {1} fra hjem til {2}.",
+                                    player.GetPlayingPlayer(), piece.GetPieceName(intRespons), moveTo);
+                                break;
+                            case 4:
+                                moveTo = 47;
+                                piece.SetPieceCords(intRespons, moveTo);
+                                board.SetPlayerHomeOut(player.GetPlayingPlayer(), intRespons);
+                                Console.WriteLine("Player {0}, har rykket {1} fra hjem til {2}.",
+                                    player.GetPlayingPlayer(), piece.GetPieceName(intRespons), moveTo);
+                                break;
+                        }
+                        break;
                     case 3:
-                        if (player1Home[pi] == pi)
-                        {
-                            isHome = true;
-                        }
-                        else
-                        {
-                            isHome = false;
-                        }
-                        break;
-                    case 4:
-                    case 5:
-                    case 6:
-                    case 7:
-                        if (player2Home[pi] == pi)
-                        {
-                            isHome = true;
-                        }
-                        else
-                        {
-                            isHome = false;
-                        }
-                        break;
-                    case 8:
-                    case 9:
-                    case 10:
-                    case 11:
-                        if (player3Home[pi] == pi)
-                        {
-                            isHome = true;
-                        }
-                        else
-                        {
-                            isHome = false;
-                        }
-                        break;
-                    case 12:
-                    case 13:
-                    case 14:
-                    case 15:
-                        if (player4Home[pi] == pi)
-                        {
-                            isHome = true;
-                        }
-                        else
-                        {
-                            isHome = false;
-                        }
+                        moveTo = 5500;
+                        Console.WriteLine("Player {0}, har rykket {1} fra {2} til slut.",
+                            player.GetPlayingPlayer(), piece.GetPieceName(intRespons), piece.GetPieceCords(intRespons));
+                        piece.SetPieceCords(intRespons, moveTo);
                         break;
                 }
-                if (isHome == true)
+
+
+            }
+            
+            
+            //Checks if the move is possible
+            public int CheckIsMovePossible(int Piece)
+            {
+                int pieceLocation = piece.GetPieceCords(Piece);
+                int finalPieceLocation = pieceLocation + GetDice();
+
+                if(pieceLocation == 5471)
                 {
-                    return pi;
+                    if (GetDice() == 6)
+                    {
+                        return CheckForDestruction(2, finalPieceLocation, Piece); //Check for destruction of other pieces
+                    }
+                    else
+                    {
+                        return 0; //Cant be moved out
+                    }
                 }
                 else
                 {
-                    //Code 21 = Out
-                    return 21;
+                    switch (player.GetPlayingPlayer())
+                    {
+                        case 1:
+                            if(finalPieceLocation >= 61 && pieceLocation - 6 <= 55)
+                            {
+                                return 3; //Move to finish
+                            }
+                            else
+                            {
+                                return CheckForDestruction(1, finalPieceLocation, Piece); //Check for destruction of other pieces
+                            }
+                        case 2:
+                            if (finalPieceLocation >= 16 && pieceLocation -6 <= 10)
+                            {
+                                return 3; //Move to finish
+                            }
+                            else
+                            {
+                                return CheckForDestruction(1, finalPieceLocation, Piece); //Check for destruction of other pieces
+                            }
+                        case 3:
+                            if (finalPieceLocation >= 31 && pieceLocation - 6 <= 25)
+                            {
+                                return 3; //Move to finish
+                            }
+                            else
+                            {
+                                return CheckForDestruction(1, finalPieceLocation, Piece); //Check for destruction of other pieces
+                            }
+                        case 4:
+                            if (finalPieceLocation >= 46 && pieceLocation - 6 <= 40)
+                            {
+                                return 3; //Move to finish
+                            }
+                            else
+                            {
+                                return CheckForDestruction(1, finalPieceLocation, Piece); //Check for destruction of other pieces - Returns 1 if no destruction occurs
+                            }
+                        default:
+                            return 0;
+                    }
                 }
             }
-
-
-        }
-        class Piece
-        {
-            //=================Fields====================
-
-            private int[] pieceCords = new int[16];
-            private string[] pieceName = { "A", "B", "C", "D", "E", "F", "G", "H", "I", "J", "K", "L", "M", "N", "O", "P", };
-
-            //=================Methods===================
-            //-------------------SET---------------------
-
-            //SET piece cordinates by number
-            public void setPieceCords(int pi, int co)
+            
+            
+            //Checks if a piece is gonna land on another piece
+            public int CheckForDestruction(int i, int final, int Piece)
             {
-                pieceCords[pi] = co;
-            }
+                int moveOut = 0;
+                int finalLocation = 0;
 
-            //-------------------GET---------------------
-
-            //GET piece cordinates by number
-            public int getPieceCords(int pi)
-            {
-                return pieceCords[pi];
-            }
-            //GET piece name by number
-            public string getPieceName(int pi)
-            {
-                return pieceName[pi];
-            }
-        }
-        class Dice
-        {
-            //=================Fields====================
-
-            private Random diceTrow = new Random();
-
-            //=================Methods===================
-            //-------------------SET---------------------
-
-
-
-            //-------------------GET---------------------
-
-            public int getDice()
-            {
-                int trow = diceTrow.Next(1, 7);
-                return trow;
-            }
-        }
-        class Player
-        {
-            //=================Fields====================
-            private int[] player1 = { 0, 1, 2, 3 };
-            private int[] player2 = { 4, 5, 6, 7 };
-            private int[] player3 = { 8, 9, 10, 11 };
-            private int[] player4 = { 12, 13, 14, 15 };
-
-            //=================Methods===================
-            //-------------------SET---------------------
-
-
-
-            //-------------------GET---------------------
-            public int getPlayerNumberByPiece(int pi)
-            {
-                int playerNumber;
-                switch (pi)
+                switch (i)
                 {
-                    case 0:
                     case 1:
+                        finalLocation = final;
+                        break;
                     case 2:
-                    case 3:
-                        playerNumber = 1;
-                        break;
-                    case 4:
-                    case 5:
-                    case 6:
-                    case 7:
-                        playerNumber = 2;
-                        break;
-                    case 8:
-                    case 9:
-                    case 10:
-                    case 11:
-                        playerNumber = 3;
-                        break;
-                    case 12:
-                    case 13:
-                    case 14:
-                    case 15:
-                        playerNumber = 4;
-                        break;
-                    default:
-                        playerNumber = 0;
+                        switch (player.GetPlayingPlayer())
+                        {
+                            case 1:
+                                moveOut = 2;
+                                break;
+                            case 2:
+                                moveOut = 17;
+                                break;
+                            case 3:
+                                moveOut = 32;
+                                break;
+                            case 4:
+                                moveOut = 47;
+                                break;
+                        }
+                        finalLocation = moveOut;
                         break;
                 }
+                for(int n = 0; n <= 15; n++)
+                {
+                    int pieceCords = piece.GetPieceCords(n);
+                    if (pieceCords == finalLocation)
+                    {
+                        int deadPiece = n;
+                        int alivePiece = Piece;
 
-                return playerNumber;
+                        piece.SetPieceCords(n, 5471);
+                        switch (player.GetPlayingPlayer())
+                        {
+                            case 1:
+                                board.SetPlayerHomeIn(player.GetPlayingPlayer(), n);
+                                break;
+                            case 2:
+                                board.SetPlayerHomeIn(player.GetPlayingPlayer(), n - 4);
+                                break;
+                            case 3:
+                                board.SetPlayerHomeIn(player.GetPlayingPlayer(), n - 8);
+                                break;
+                            case 4:
+                                board.SetPlayerHomeIn(player.GetPlayingPlayer(), n - 12);
+                                break;
+                        }
+                        Console.WriteLine("Player {0} har smidt {1} hjem!", player.GetPlayingPlayer(), piece.GetPieceName(deadPiece));
+                        
+                    }
+                }
+                return i;
             }
 
-        }
-        class Ui
-        {
-            //=================Fields====================
+            public void NextPlayer()
+            {
+                player.SetNextPlayingPlayer();
+            }
 
+            //Gets the current dice, dont change anything
+            public int GetDice()
+            {
+                return dice.GetCurrentDice();
+            }
 
-
-            //=================Methods===================
-            //-------------------SET---------------------
-
-
-
-            //-------------------GET---------------------
-
-
-
-        }
-        class Program
-        {
+            
+            //Main
             static void Main(string[] args)
             {
-                //Variables
+                Program program = new Program();
 
-                Game game = new Game();
-                game.reset();
+                program.Reset();
 
-                Dice trow = new Dice();
+                do
+                {
+                    program.GetAllInfo();
 
+                    program.SetNewDice();
 
+                    program.GetOptions();
 
-                game.GetPlayingPlayer();
+                    program.PlayerRespons();
 
+                    program.NextPlayer();
 
+                } while (program.run == 1);
 
 
             }
-        }
+        } 
     }
 }
